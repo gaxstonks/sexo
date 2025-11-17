@@ -1,14 +1,23 @@
-'use client'
+'use client';
 import { useEffect, useState } from 'react';
-export default function Account() {
-  const [user, setUser] = useState(null);
+
+export default function AccountPage(){
+  const [user, setUser] = useState<any>(null);
   useEffect(()=>{
-    fetch('/api/user?uid=' + (new URLSearchParams(window.location.search).get('uid') || '') )
-    .then(r=>r.json()).then(setUser).catch(()=>{});
+    fetch('/api/auth/me').then(r=>r.json()).then(d=>setUser(d)).catch(()=>{});
   },[]);
-  return <div className='p-10'>
-    <h1>Minha Conta</h1>
-    {user ? <div><p>Email: {user.email}</p><p>Nome: {user.name}</p></div> : <p>Faça login</p>}
-    <form method='post' action='/api/logout'><button type='submit' className='p-2 bg-gray-700 text-white mt-2'>Logout</button></form>
-  </div>
+  async function uploadFile(e:any){
+    const f = e.target.files[0];
+    const data = await f.arrayBuffer();
+    const b64 = Buffer.from(data).toString('base64');
+    const res = await fetch('/api/upload',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ userId: user?.id, name: f.name, data: b64 })});
+    const j = await res.json();
+    alert(JSON.stringify(j));
+  }
+  if(!user) return <div>Loading...</div>;
+  return <div style={{padding:20}}>
+    <h2>Minha Conta</h2>
+    <p>Email: {user.email}</p>
+    <input type="file" onChange={uploadFile} />
+  </div>;
 }
