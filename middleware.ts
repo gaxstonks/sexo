@@ -1,9 +1,8 @@
-
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-const PUBLIC = ['/login','/register','/api/login','/api/register','/favicon.ico'];
+const PUBLIC = ['/login','/register','/api/login','/api/register','/favicon.ico','/api/auth/google','/api/request-reset','/api/reset-password','/api/auth/google'];
 
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
