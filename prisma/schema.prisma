@@ -13,12 +13,7 @@ model User {
   name      String?
   createdAt DateTime @default(now())
   subscriptions Subscription[]
-
-  passwordHash String?
-  googleId String? @unique
-  resetToken String? 
-  resetTokenExpires DateTime?
-  refreshToken String?}
+}
 
 model Subscription {
   id        String   @id @default(cuid())
