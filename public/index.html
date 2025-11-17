@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+  <head><meta charset="utf-8"><title>Login / Register</title></head>
+  <body>
+    <div id="app">
+      <h2>Login / Registro</h2>
+      <form id="authForm">
+        <input id="email" placeholder="email" required/>
+        <input id="password" placeholder="senha" type="password" required/>
+        <button id="submit">Entrar / Registrar</button>
+      </form>
+      <p id="msg"></p>
+    </div>
+    <script>
+      const f = document.getElementById("authForm");
+      f.addEventListener("submit", async (e)=> {
+        e.preventDefault();
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        // Try server
+        try {
+          const res = await fetch("/api/login", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({email,password})});
+          if (res.ok) {
+            const d = await res.json();
+            localStorage.setItem("app_user", JSON.stringify(d));
+            location.reload();
+            return;
+          }
+        } catch(e){}
+        // fallback: store locally
+        const u = {id: Date.now(), email, plan:null};
+        localStorage.setItem("app_user", JSON.stringify(u));
+        document.getElementById("msg").innerText="Registrado localmente";
+        location.reload();
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1 @@
+export const auth = { register(){}, login(){}, logout(){}};

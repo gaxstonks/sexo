@@ -1,0 +1,1 @@
+export function middleware(){ return Response.redirect('/auth/login') }
